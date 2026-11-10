@@ -1,0 +1,14 @@
+# Acquisition / task (PC1 and PC2), versions used
+psychopy==2025.1.1
+pylsl==1.17.6
+mediapipe==0.10.9
+opencv-python==4.13.*
+numpy
+sounddevice
+soundfile
+pyserial
+arabic-reshaper
+python-bidi
+# PC1 only (Polar H10)
+bleak
+polar-python

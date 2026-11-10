@@ -1,0 +1,21 @@
+# --- never commit participant data ---
+data/
+Experiment_Data/
+*.xdf
+*.cnt
+*.wav
+*.csv
+*.npy
+*.mp4
+*.avi
+results/
+frames/
+figures/
+polar_data/
+
+# --- Python / OS ---
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
