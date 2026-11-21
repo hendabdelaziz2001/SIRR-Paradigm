@@ -7,19 +7,15 @@ Streams ALL data the Polar H10 can produce:
   ECG             — 130 Hz, raw electrode signal in µV
   ACC             — 25 Hz, 3-axis accelerometer in mg
 
-CHANGES (2026-05):
-  1. ECG stream added  — 130 Hz, per-sample timestamps from hardware clock
-  2. ACC stream added  — 25 Hz, 3 channels (X,Y,Z mg)
-  3. Subject folder created per session containing 3 CSV files:
-       sub-{ID}_{Name}_{ts}/
-         PolarH10_{ID}_HR_{ts}.csv
-         PolarH10_{ID}_ECG_{ts}.csv
-         PolarH10_{ID}_ACC_{ts}.csv
-  4. ECG timestamps: hardware nanosecond clock converted to LSL clock via
-     one-time offset computed at first packet — per-sample accuracy ±7ms
-  5. ACC timestamps: same hardware-clock approach as ECG
-  6. HR srate=0 (irregular, already fixed previously)
-  7. PolarH10_Markers outlet silent (no conflict with PC2 markers)
+Local backup: one folder per session containing HR, ECG and ACC CSV files.
+ECG and ACC timestamps are derived from the sensor clock, mapped to the LSL
+clock by a one-time offset computed at the first packet.
+
+KNOWN ISSUE: each ECG/ACC packet is pushed to LSL with the timestamp of its
+first sample, whereas pylsl assigns a push_chunk timestamp to the last sample.
+ECG and ACC samples in the XDF file are therefore time-stamped early by about
+one packet duration (~0.4 s). The per-sample times in the local CSV files and
+the HR/RR streams are not affected.
 
 LSL Streams published:
   PolarH10_HR      — BPM,     irregular (srate=0), float32
@@ -75,7 +71,7 @@ except ImportError:
 # ── CONFIGURATION ─────────────────────────────────────────────────────────────
 # ══════════════════════════════════════════════════════════════════════════════
 
-DEVICE_ADDRESS  = "24:AC:AC:13:DE:CC"   # ← Your Polar H10 MAC address
+DEVICE_ADDRESS  = "XX:XX:XX:XX:XX:XX"   # ← Your Polar H10 MAC address
 RR_BUFFER_SIZE  = 10                     # RR intervals kept for RMSSD
 
 ECG_SAMPLE_RATE = 130                    # Hz — only valid rate for H10
@@ -433,8 +429,8 @@ async def run_stream(address, subject_id, subject_name, stop_event):
                     ])
                     ecg_count += 1
 
-                # push_chunk with first sample timestamp
-                # LSL interpolates the rest at nominal 130 Hz
+                # KNOWN ISSUE (see module docstring): this passes the first
+                # sample's time, but pylsl treats it as the last sample's time
                 first_t = (sensor_s - (n - 1) * interval) + offset
                 outlets['ecg'].push_chunk(lsl_chunk, first_t)
 
@@ -582,7 +578,7 @@ def main():
     print("  Ctrl+C = stop all streams cleanly")
     print("=" * 60 + "\n")
 
-    # ── FIX: Create loop first, then asyncio.Event ─────────────────────────
+    # ── Create loop first, then asyncio.Event ─────────────────────────
     loop       = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     stop_event = asyncio.Event()

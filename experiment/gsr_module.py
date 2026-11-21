@@ -171,7 +171,7 @@ def _gsr_thread(port_name, baud, subject_id, output_folder):
     time.sleep(2)        # Let Arduino boot / stabilize
     port.reset_input_buffer()
 
-    # ── FIX 1: Measure actual sample rate before creating LSL stream ──────────
+    # ── Measure actual sample rate before creating LSL stream ──────────
     measured_hz    = _measure_rate(port, RATE_MEASURE_S)
     _measured_rate = measured_hz
     port.reset_input_buffer()   # clear any backlog from measurement period
@@ -189,7 +189,7 @@ def _gsr_thread(port_name, baud, subject_id, output_folder):
     print(f"[GSR] Recording started on {port_name} @ {baud} baud "
           f"({measured_hz:.1f} Hz)")
 
-    # ── FIX 2: Blocking readline loop (no in_waiting spinning) ───────────────
+    # ── Blocking readline loop (no in_waiting spinning) ───────────────
     while not _stop_event.is_set():
 
         # ── Drain marker queue first ──────────────────────────────────────────
@@ -238,7 +238,7 @@ def _gsr_thread(port_name, baud, subject_id, output_folder):
             f"{gsr_value:.1f}", ''
         ])
 
-        # ── FIX 3: Flush every FLUSH_EVERY samples ────────────────────────────
+        # ── Flush every FLUSH_EVERY samples ────────────────────────────
         flush_counter += 1
         if flush_counter >= FLUSH_EVERY:
             _csv_file.flush()
@@ -249,7 +249,7 @@ def _gsr_thread(port_name, baud, subject_id, output_folder):
         rate_count    += 1
         _data_queue.put({'gsr': gsr_value, 'elapsed': elapsed, 'lsl_t': t})
 
-        # ── FIX 4: Report live rate every RATE_REPORT_S seconds ───────────────
+        # ── Report live rate every RATE_REPORT_S seconds ───────────────
         now = time.time()
         if now - last_rate_t >= RATE_REPORT_S:
             live_hz     = rate_count / (now - last_rate_t)
@@ -291,7 +291,7 @@ def start_gsr(port=GSR_PORT, baud=GSR_BAUD,
     global _thread, _sample_count, _start_lsl_t, _measured_rate
     global _gsr_outlet, _mrk_outlet, _csv_file, _csv_writer, _csv_filename
 
-    # ── FIX 5: Full state reset so start_gsr() is safe to call again ─────────
+    # ── Full state reset so start_gsr() is safe to call again ─────────
     _stop_event.clear()
     _sample_count  = 0
     _start_lsl_t   = None

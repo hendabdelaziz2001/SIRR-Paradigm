@@ -48,8 +48,8 @@ Markers
 -------
 Global markers use 1–7, 200–211, and 999. Trial markers use
 300 + trial_id*10 + phase, where phase 1–7 means fixation, stimulus, onset,
-offset, truth, lie, and ITI respectively. This separate range prevents the
-trial-20 collision that existed in the previous N*10+phase scheme.
+offset, truth, lie, and ITI respectively; this range does not overlap the
+global markers.
 """
 
 # ── Imports ───────────────────────────────────────────────────────────────────
@@ -221,7 +221,7 @@ TRIALS_VIDEO_B = [
 
 def mk(trial_id, phase):
     # Keep trial markers separate from the global 200-211 video/instruction
-    # marker range.  The old N*10+phase scheme collided at trial 20.
+    # marker range.
     return 300 + trial_id * 10 + phase
 
 MK_FIXATION       = 1   # N1
@@ -1417,7 +1417,7 @@ def main():
             aborted = True
 
     # ─────────────────────────────────────────────────────────────────────────
-    # ── PHASE 4: Two‑Video Phase (replaces old crime video + Block 2/3) ─────
+    # ── PHASE 4: Two‑Video Phase ─────
     # ─────────────────────────────────────────────────────────────────────────
     if not aborted:
         show_acquaintance_transition(win)

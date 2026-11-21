@@ -128,10 +128,10 @@ class LabRecorderController:
         If subject_folder is provided (recommended):
           XDF saved inside subject_folder/XDF/ alongside Audio/, Behavioral/, etc.
           Example:
-            Sub035_Ahmed_S001_20260524/
+            Sub035_XX_S001_20260524/
               Audio/  Behavioral/  EyeTracking/  Physiological/  Logs/
               XDF/
-                sub-035_Ahmed_ses-001_task-DeceptionDetection_run-001.xdf
+                sub-035_XX_ses-001_task-DeceptionDetection_run-001.xdf
 
         If subject_folder is None (fallback):
           XDF saved in study_root/sub-{id}_{name}_ses-{ses}/
@@ -266,7 +266,7 @@ if __name__ == '__main__':
     lr = LabRecorderController(
         study_root   = 'Experiment_Data',
         subject_id   = '001',
-        subject_name = 'Ahmed Mohamed',
+        subject_name = 'Test',
         session      = '001',
         task         = 'DeceptionDetection',
         run          = '001',
