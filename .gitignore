@@ -7,6 +7,8 @@ Experiment_Data/
 *.csv
 *.npy
 *.mp4
+!experiment/video_a.mp4
+!experiment/video_b.mp4
 *.avi
 results/
 frames/

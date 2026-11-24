@@ -24,7 +24,18 @@ experiment/                    task and acquisition code (as used for data colle
   voice_module.py              lavalier microphone, 16 kHz LSL audio stream
   lab_recorder.py              remote control of LabRecorder (start/stop/refresh)
   polar_streamer_pc1.py        Polar H10 (ECG, HR, R-R, RMSSD, ACC) to LSL, runs on PC1
+  video_a.mp4, video_b.mp4     the two stimulus videos (see below)
 ```
+
+## Stimulus videos
+
+`experiment/video_a.mp4` (76.3 s) and `experiment/video_b.mp4` (68.9 s) are the two theft videos shown in the
+task (1280 x 720 pixels, 30 frames/s, audio in Egyptian Arabic). They are the exact files used for data collection.
+Both are AI-generated: still images were made with ChatGPT image generation (OpenAI) and animated, with dialogue,
+using Veo 3 (Google). They show no real individuals.
+
+The videos are shared under the [Creative Commons Attribution 4.0 International licence (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/);
+the MIT licence in `LICENSE` covers the code only. Please cite the SIRR paper when you use them.
 
 ## Hardware
 
@@ -45,7 +56,7 @@ LabRecorder on PC2.
 2. On PC1, start the ANT Neuro eego LSL stream and run `python experiment/polar_streamer_pc1.py`.
    Set `DEVICE_ADDRESS` to your Polar H10's address first.
 3. On PC2, set the GSR serial port in `main_experiment.py` (default `COM3`). Place the two stimulus videos
-   (`video_a.mp4`, `video_b.mp4`) next to the script, start LabRecorder, and run
+   (`video_a.mp4`, `video_b.mp4`, included in `experiment/`) next to the script, start LabRecorder, and run
    `python experiment/main_experiment.py`.
 4. Select the counterbalancing sequence (1-4) at start-up:
    - S1: Cooperate-A then Protect-B
